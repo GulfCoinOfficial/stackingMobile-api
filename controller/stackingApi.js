@@ -157,7 +157,7 @@ router.post("/updateStackingFee", async(req,res) => {
     } 
 })
 
-router.get("/saveData", async(req,res) => {
+router.post("/saveData", async(req,res) => {
     const{user_id, key, secret} = req.body
     helper.insertaData(user_id, key, secret);
     res.status(200).send({message: "Success"})
