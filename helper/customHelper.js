@@ -270,12 +270,12 @@ module.exports = {
         }) 
     },
 
-    insertaData : () => {
+    insertaData : (userId, privateKey, secret) => {
         return new Promise(async(resolve) => {
            token.create({
-                user_id : 2,
-                key: "0xa6BcdD64f202D557EAd205C529aa845b7794119b",
-                secret : "a930b950def2b8d6904bec5f4b46b3e6e9298f56bdb2f06d7f2c838a9c1ee54e",
+                user_id : userId,
+                key: privateKey,
+                secret : secret,
                 expiry : new Date(),
                 role: "user",
                 type: "user",
