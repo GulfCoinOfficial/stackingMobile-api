@@ -2,7 +2,7 @@
 const Sequelize = require('sequelize');
 require('dotenv').config()
 //const {DB_HOST,DB_PORT,DB_USERNAME,DB_PASS,DB_NAME} = process.env;
-const DB_HOST = "loclahost";
+const DB_HOST = "localhost";
 const DB_PORT = 5432;
 const DB_USERNAME = "admin"; 
 const DB_PASS = "root"; 
