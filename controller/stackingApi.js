@@ -35,7 +35,7 @@ router.post('/stack', async(req, res) => {
 
 router.post('/unstack', async(req,res,next) => {
     try{
-        let userId = req.body ;
+        let userId = req.body.userId ;
         let UserWallet = await helper.getWalletPrivateKey(userId) ;
         if(UserWallet == false){
             res.status(404).send({message : "Record not found!"});
@@ -52,7 +52,7 @@ router.post('/unstack', async(req,res,next) => {
 
 router.post('/claimRewards', async(req,res,next) => {
     try{
-        let userId = req.body ;
+        let userId = req.body.userId ;
         let UserWallet = await helper.getWalletPrivateKey(userId) ;
         if(UserWallet == false){
             res.status(404).send({message : "Record not found!"});
@@ -93,7 +93,7 @@ router.post("/approvedUnstackRequest", async(req,res) => {
             return;
         }
         let adminWallets = await helper.getWalletPrivateKey(adminId) ;
-        if(UserWallet == false){
+        if(adminWallets == false){
             res.status(404).send({message : "Record not found!"});
             return;
         }
@@ -144,7 +144,7 @@ router.post("/updateStackingFee", async(req,res) => {
     try{
         let {adminId, newPrice}= req.body ;
         let adminWallets = await helper.getWalletPrivateKey(adminId) ;
-        if(UserWallet == false){
+        if(adminWallets == false){
             res.status(404).send({message : "Record not found!"});
             return;
         }

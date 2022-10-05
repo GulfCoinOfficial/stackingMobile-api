@@ -4,7 +4,7 @@ const sequelize = require('../databaseConnection/db');
 class otp extends Model { }
 otp.init({
     user_id: {
-      type: DataTypes.STRING,
+      type: DataTypes.INTEGER,
       validate: {
         notNull: {
           msg: 'userId can not be null',
