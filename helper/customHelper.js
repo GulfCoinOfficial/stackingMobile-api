@@ -7,10 +7,19 @@ const token = require("../models/tokens");
 const StackingAbi = require("../abi/stackingAbi.json");
 const gulfAbi = require("../abi/gulfAbi.json");
 
-const {MESSENTEEUSERNAME, MESSENTEPASSWORD, SENDERNAME, EXPIRYMINUTES,GULFCONTRACTADDRESS,STACKINGCONTRACTADDRESS, PROVIDER} = process.env;
+//const {MESSENTEEUSERNAME, MESSENTEPASSWORD, SENDERNAME, EXPIRYMINUTES,GULFCONTRACTADDRESS,STACKINGCONTRACTADDRESS, PROVIDER} = process.env;
+
+const MESSENTEEUSERNAME =  "31db1978157b47b1b2152230463ed4b5"
+const MESSENTEPASSWORD =  "2860f632951c41b8a29b717afb5dfada"
+const SENDERNAME = "GULF"
+
+const EXPIRYMINUTES=2
+const STACKINGCONTRACTADDRESS = "0x38A38c8C5BbdE52aE163aCAB4b9e1d24E23fbf51"
+const GULFCONTRACTADDRESS="0xD5C3C4B4F80fFfd8E7a130F4846496BDa6035728"
+const PROVIDER = "https://data-seed-prebsc-1-s1.binance.org:8545/"
+
 const Web3 = require("web3")
 const Provider = require('@truffle/hdwallet-provider');
-const { OmniMessageCreateSuccessResponse } = require('messente_api');
 module.exports = {
     sendMessage : (phoneNumber, code) => {
         return new Promise(resolve => {
