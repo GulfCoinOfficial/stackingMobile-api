@@ -19,8 +19,8 @@ router.post('/stack', async(req, res) => {
         let balance = await helper.checkBalance(UserWallet.wallet, gulfContractObject, web3);
         console.log("balance ======>>>>", balance) ;
         console.log("stacking amount", amount+ parseInt(STACKINGFEE)) ;
-        let transferAllownce = await helper.transferAllow(UserWallet.wallet, (amount + parseInt(STACKINGFEE)), gulfContractObject, web3) ;
         if(balance >= (amount + parseInt(STACKINGFEE)) && transferAllownce != false){
+            let transferAllownce = await helper.transferAllow(UserWallet.wallet, (amount + parseInt(STACKINGFEE)), gulfContractObject, web3) ;
             let responseData = await helper.stackeToken(UserWallet.wallet , (amount + parseInt(STACKINGFEE)), package.toString(), stackingContractObject, web3)
             responseData.transferAllowHash = transferAllownce;
             console.log("test",responseData)
