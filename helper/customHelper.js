@@ -145,7 +145,7 @@ module.exports = {
                 const bnbAmount = web3.utils.fromWei(balance, 'ether')
                 resolve(bnbAmount)
             }catch(error){
-                console.log(error)
+                resolve(0)
             }
         })
     },
