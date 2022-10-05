@@ -37,6 +37,10 @@ router.post('/unstack', async(req,res,next) => {
     try{
         let userId = req.body ;
         let UserWallet = await helper.getWalletPrivateKey(userId) ;
+        if(UserWallet == false){
+            res.status(404).send({message : "Record not found!"});
+            return;
+        }
         let web3 = await helper.getWeb3Object(UserWallet.privateKey);
         let stackingContractObject = await helper.getContractObjectStacking(web3);
         let response = await helper.sendUnstackRequest(stackingContractObject, UserWallet.wallet);
@@ -50,6 +54,10 @@ router.post('/claimRewards', async(req,res,next) => {
     try{
         let userId = req.body ;
         let UserWallet = await helper.getWalletPrivateKey(userId) ;
+        if(UserWallet == false){
+            res.status(404).send({message : "Record not found!"});
+            return;
+        }
         let web3 = await helper.getWeb3Object(UserWallet.privateKey);
         let stackingContractObject = await helper.getContractObjectStacking(web3);
         let response = await helper.sendRequestForClaims(stackingContractObject, UserWallet.wallet);
@@ -63,6 +71,10 @@ router.post("/renewPackage", async(req,res) => {
     try{
         let {userId, newPackage }= req.body ;
         let UserWallet = await helper.getWalletPrivateKey(userId) ;
+        if(UserWallet == false){
+            res.status(404).send({message : "Record not found!"});
+            return;
+        }
         let web3 = await helper.getWeb3Object(UserWallet.privateKey);
         let stackingContractObject = await helper.getContractObjectStacking(web3);
         let response = await helper.renewPackages(stackingContractObject, UserWallet.wallet, newPackage);
@@ -76,7 +88,15 @@ router.post("/approvedUnstackRequest", async(req,res) => {
     try{
         let {userId, adminId }= req.body ;
         let UserWallet = await helper.getWalletPrivateKey(userId) ;
+        if(UserWallet == false){
+            res.status(404).send({message : "Record not found!"});
+            return;
+        }
         let adminWallets = await helper.getWalletPrivateKey(adminId) ;
+        if(UserWallet == false){
+            res.status(404).send({message : "Record not found!"});
+            return;
+        }
         let web3 = await helper.getWeb3Object(adminWallets.privateKey);
         let stackingContractObject = await helper.getContractObjectStacking(web3);
         let response = await helper.approvedRequest(stackingContractObject, UserWallet.wallet, adminWallets.wallet);
@@ -90,6 +110,10 @@ router.post("/updatePackageBreakingPanalities", async(req,res) => {
     try{
         let {adminId, package, newPercentage }= req.body ;
         let adminWallets = await helper.getWalletPrivateKey(adminId) ;
+        if(UserWallet == false){
+            res.status(404).send({message : "Record not found!"});
+            return;
+        }
         let web3 = await helper.getWeb3Object(adminWallets.privateKey);
         let stackingContractObject = await helper.getContractObjectStacking(web3);
         let response = await helper.updatePanality(stackingContractObject, adminWallets.wallet, package, newPercentage);
@@ -103,6 +127,10 @@ router.post("/updateRewardsPercentage", async(req,res) => {
     try{
         let {adminId, package, newPercentage }= req.body ;
         let adminWallets = await helper.getWalletPrivateKey(adminId) ;
+        if(UserWallet == false){
+            res.status(404).send({message : "Record not found!"});
+            return;
+        }
         let web3 = await helper.getWeb3Object(adminWallets.privateKey);
         let stackingContractObject = await helper.getContractObjectStacking(web3);
         let response = await helper.updatePanality(stackingContractObject, adminWallets.wallet, package, newPercentage);
@@ -116,6 +144,10 @@ router.post("/updateStackingFee", async(req,res) => {
     try{
         let {adminId, newPrice}= req.body ;
         let adminWallets = await helper.getWalletPrivateKey(adminId) ;
+        if(UserWallet == false){
+            res.status(404).send({message : "Record not found!"});
+            return;
+        }
         let web3 = await helper.getWeb3Object(adminWallets.privateKey);
         let stackingContractObject = await helper.getContractObjectStacking(web3);
         let response = await helper.updateStackingPrice(stackingContractObject, adminWallets.wallet, newPrice);
