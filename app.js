@@ -3,6 +3,7 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+var cors = require('cors')
 const sequelize  = require("./databaseConnection/db");
 
 try {
@@ -11,7 +12,6 @@ try {
 } catch (error) {
   console.log('Error Establishing Connection With Database', error)
 }
-
 var indexRouter = require('./controller/communication');
 var stack = require("./controller/stackingApi");
 var app = express();
@@ -24,6 +24,8 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+
+app.use(cors({ origin: true }));
 
 app.use('/communication', indexRouter);
 app.use("/stacking", stack)
