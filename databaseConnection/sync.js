@@ -2,6 +2,7 @@
 /* eslint-disable no-console */
 require('dotenv').config()
 require("../models/otp")
+require("../models/tokens");
 const sequelize = require('../databaseConnection/db')
 const syncModelsWithDB = async () => {
     try {
