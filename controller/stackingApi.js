@@ -23,6 +23,9 @@ router.post('/stack', async(req, res) => {
             let transferAllownce = await helper.transferAllow(UserWallet.wallet, (amount + parseInt(STACKINGFEE)), gulfContractObject, web3) ;
             //if(transferAllownce != false){
             let responseData = await helper.stackeToken(UserWallet.wallet , (amount + parseInt(STACKINGFEE)), package.toString(), stackingContractObject, web3)
+            if(responseData.status == 404){
+                helper.decreaseAllowanceBalance(UserWallet.wallet , (amount + parseInt(STACKINGFEE)), package.toString(), stackingContractObject, web3); 
+            }
             responseData.transferAllowHash = transferAllownce;
             console.log("test",responseData)
             res.status(responseData.status).send(responseData)
