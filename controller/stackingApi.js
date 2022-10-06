@@ -25,7 +25,7 @@ router.post('/stack', async(req, res) => {
                 res.status(404).send({status: 404, message : "Insufficient Allowance decrease the allowance first and try again!"})
                 return;
             }            
-            let responseData = await helper.stackeToken(UserWallet.wallet , (amount + parseInt(STACKINGFEE)), package.toString(), stackingContractObject, web3)
+            let responseData = await helper.stackeToken(UserWallet.wallet , amount , package.toString(), stackingContractObject, web3)
             if(responseData.status == 404){
                 helper.decreaseAllowanceBalance(UserWallet.wallet, (amount + parseInt(STACKINGFEE)), gulfContractObject, web3); 
             }
