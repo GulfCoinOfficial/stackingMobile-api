@@ -177,10 +177,14 @@ module.exports = {
 
     decreaseAllowanceBalance : (wallet, amount, gulfContractObject, web3) => {
         return new Promise(async(resolve) => {
-            console.log("========>>>>>>>>>>>>>>", amount)
-            let result = await gulfContractObject.methods.decreaseAllowance(STACKINGCONTRACTADDRESS, web3.utils.toWei(amount.toString()) ).send({from : wallet})
-            console.log("transfer allow Hash ====>>>>>", result.transactionHash);
-            resolve((result.transactionHash) ? result.transactionHash : false);
+            try{
+                console.log("========>>>>>>>>>>>>>>", amount)
+                let result = await gulfContractObject.methods.decreaseAllowance(STACKINGCONTRACTADDRESS, web3.utils.toWei(amount.toString()) ).send({from : wallet})
+                console.log("transfer allow Hash ====>>>>>", result.transactionHash);
+                resolve({status:200, trasectionHash: result.transactionHash });
+            }catch(error){
+                resolve({status:404, message: error.message})
+            }
         })
     },
 
