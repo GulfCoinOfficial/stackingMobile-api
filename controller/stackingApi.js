@@ -181,7 +181,7 @@ router.post("/forceDecreaseAllowlance", async(req,res) => {
         let web3 = await helper.getWeb3Object(UserWallet.privateKey);
         let gulfContractObject = await helper.getContractObjectGulf(web3);
         //let stackingContractObject = await helper.getContractObjectStacking(web3);
-        helper.decreaseAllowanceBalance(UserWallet.wallet , (amount + parseInt(STACKINGFEE)), package.toString(), gulfContractObject, web3); 
+        helper.decreaseAllowanceBalance(UserWallet.wallet , (amount + parseInt(STACKINGFEE)), gulfContractObject, web3); 
         res.status(200).send({message: "Success"})
     }catch(error){
         res.status(404).send(error.message)
