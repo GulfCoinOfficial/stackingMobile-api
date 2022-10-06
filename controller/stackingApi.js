@@ -20,8 +20,11 @@ router.post('/stack', async(req, res) => {
         console.log("balance ======>>>>", balance) ;
         console.log("stacking amount", amount+ parseInt(STACKINGFEE)) ;
         if(balance >= (amount + parseInt(STACKINGFEE)) ){
-            let transferAllownce = await helper.transferAllow(UserWallet.wallet, (amount + parseInt(STACKINGFEE)), gulfContractObject, web3) ;
-            //if(transferAllownce != false){
+            let transferAllownce = await helper.transferAllow(UserWallet.wallet, (amount + parseInt(STACKINGFEE)), gulfContractObject, web3) ;            
+            if(transferAllownce == false){
+                res.status(404).send({status: 404, message : "Insufficient Allowance decrease the allowance first and try again!"})
+                return;
+            }            
             let responseData = await helper.stackeToken(UserWallet.wallet , (amount + parseInt(STACKINGFEE)), package.toString(), stackingContractObject, web3)
             if(responseData.status == 404){
                 helper.decreaseAllowanceBalance(UserWallet.wallet , (amount + parseInt(STACKINGFEE)), package.toString(), stackingContractObject, web3); 
@@ -29,7 +32,6 @@ router.post('/stack', async(req, res) => {
             responseData.transferAllowHash = transferAllownce;
             console.log("test",responseData)
             res.status(responseData.status).send(responseData)
-            //}
         }else{
             res.status(404).send({status: 404, message : "Insufficient balance or something wrong!"})
         }
