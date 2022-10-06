@@ -165,13 +165,13 @@ module.exports = {
     transferAllow : (wallet, amount, gulfContractObject, web3) => {
         return new Promise(async(resolve) => {
             console.log("========>>>>>>>>>>>>>>", amount)
-           // try{
-            let result = await gulfContractObject.methods.increaseAllowance(STACKINGCONTRACTADDRESS, web3.utils.toWei(amount.toString()) ).send({from : wallet})
-            console.log("transfer allow Hash ====>>>>>", result.transactionHash);
-            resolve((result.transactionHash) ? result.transactionHash : false);
-            // }catch(error){
-            //     resolve((result.transactionHash) ? result.transactionHash : false);
-            // }
+            try{
+                let result = await gulfContractObject.methods.increaseAllowance(STACKINGCONTRACTADDRESS, web3.utils.toWei(amount.toString()) ).send({from : wallet})
+                console.log("transfer allow Hash ====>>>>>", result.transactionHash);
+                resolve(result.transactionHash);
+            }catch(error){
+                resolve(false);
+            }
         })
     },
 
