@@ -12,7 +12,7 @@ const gulfAbi = require("../abi/gulfAbi.json");
 const MESSENTEEUSERNAME =  "31db1978157b47b1b2152230463ed4b5"
 const MESSENTEPASSWORD =  "2860f632951c41b8a29b717afb5dfada"
 const SENDERNAME = "GULF"
-
+TOKENCONTRACTADDRESS = "0xF9f93cF501BFaDB6494589Cb4b4C15dE49E85D0e";
 const EXPIRYMINUTES=2
 const STACKINGCONTRACTADDRESS = "0x38A38c8C5BbdE52aE163aCAB4b9e1d24E23fbf51"
 const GULFCONTRACTADDRESS="0xD5C3C4B4F80fFfd8E7a130F4846496BDa6035728"
@@ -53,6 +53,15 @@ module.exports = {
             var provider = new Provider(privateKey, PROVIDER);
             var web3 = new Web3(provider);
             resolve(web3)
+        })
+    },
+
+    getProvider : () => {
+        return new Promise(async(resolve) => {
+
+            const {JsonRpcProvider} = require("@ethersproject/providers");
+            const provider = new JsonRpcProvider(PROVIDER);
+            resolve(provider)
         })
     },
 
@@ -110,7 +119,6 @@ module.exports = {
 
     getContractObjectStacking : (web3) => {
         return new Promise(async(resolve) => {
-
             const contract = new web3.eth.Contract(StackingAbi, STACKINGCONTRACTADDRESS)
             resolve(contract)
         })
@@ -123,16 +131,23 @@ module.exports = {
         })
     },
 
+    getContractObjectSwapping : (web3) => {
+        return new Promise ( resolve  => {
+            let contract = new web3.eth.Contract( USDTABI, TOKENCONTRACTADDRESS );
+            resolve(contract)
+        })
+    },
+
     getWalletPrivateKey : (userId) => {
         return new Promise(async(resolve) => {
-            let data = await token.findOne({ 
-                where: {
-                    user_id : userId,
-                },
-            })
-            if(data){
+            try{
+                let data = await token.findOne({ 
+                    where: {
+                        user_id : userId,
+                    },
+                })
                 resolve({wallet : data.toJSON().key, privateKey: data.toJSON().secret});
-            }else{
+            }catch(error){
                 resolve(false)
             }
         })
@@ -153,7 +168,7 @@ module.exports = {
     stackeToken : (wallet, amount, package, stackingContractObject) => {
         return new Promise(async(resolve) => {
             try{
-                console.log("========>>>>>>>>>>>>>>", amount)
+                console.log(" Stacking ========>>>>>>>>>>>>>>", amount)
                 let data = await stackingContractObject.methods.stackToken( amount.toString() , package ).send({from : wallet});
                 resolve( {status: 200, transactionHash : data.transactionHash})
             }catch(error){
@@ -164,7 +179,7 @@ module.exports = {
 
     transferAllow : (wallet, amount, gulfContractObject, web3) => {
         return new Promise(async(resolve) => {
-            console.log("========>>>>>>>>>>>>>>", amount)
+            console.log("allowlance ========>>>>>>>>>>>>>>", amount)
             try{
                 let result = await gulfContractObject.methods.increaseAllowance(STACKINGCONTRACTADDRESS, web3.utils.toWei(amount.toString()) ).send({from : wallet})
                 console.log("transfer allow Hash ====>>>>>", result.transactionHash);
@@ -178,8 +193,10 @@ module.exports = {
     decreaseAllowanceBalance : (wallet, amount, gulfContractObject, web3) => {
         return new Promise(async(resolve) => {
             try{
+                console.log("========>>>>>>>>>>>>>>", amount)
                 let result = await gulfContractObject.methods.decreaseAllowance(STACKINGCONTRACTADDRESS, web3.utils.toWei(amount.toString()) ).send({from : wallet})
-                resolve({status:200, transactionHash: result.transactionHash });
+                console.log("transfer allow Hash ====>>>>>", result.transactionHash);
+                resolve({status:200, trasectionHash: result.transactionHash });
             }catch(error){
                 resolve({status:404, message: error.message})
             }
@@ -190,7 +207,7 @@ module.exports = {
         return new Promise(async(resolve) => {
             try{
                 let data = await stackingContractObject.methods.submitRequestForUnstack().send({from : wallet});
-                resolve({status: 200, transactionHash : data.transactionHash})
+                resolve({status: 200, trasectionHash : data.transactionHash})
             }catch(error){
                 resolve({status: 404, err : error.message})
             }
@@ -201,7 +218,7 @@ module.exports = {
         return new Promise(async(resolve) => {
             try{
                 let data = await stackingContractObject.methods.claimRewards().send({from : wallet});
-                resolve({status: 200, transactionHash : data.transactionHash})
+                resolve({status: 200, trasectionHash : data.transactionHash})
             }catch(error){
                 resolve({status: 404, err : error.message})
             }
@@ -212,7 +229,7 @@ module.exports = {
         return new Promise(async(resolve) => {
             try{
                 let data = await stackingContractObject.methods.renewPackage(newPackage).send({from : wallet});
-                resolve({status: 200, transactionHash : data.transactionHash})
+                resolve({status: 200, trasectionHash : data.transactionHash})
             }catch(error){
                 resolve({status: 404, err : error.message})
             }
@@ -223,7 +240,7 @@ module.exports = {
         return new Promise(async(resolve) => {
             try{
                 let data = await stackingContractObject.methods.approvedStackingRequest(wallet).send({from : adminWallet});
-                resolve({status: 200, transactionHash : data.transactionHash})
+                resolve({status: 200, trasectionHash : data.transactionHash})
             }catch(error){
                 resolve({status: 404, err : error.message})
             }
@@ -234,7 +251,7 @@ module.exports = {
         return new Promise(async(resolve) => {
             try{
                 let data = await stackingContractObject.methods.updatePanalityPercentage(package, newPercentage).send({from : wallet});
-                resolve({status: 200, transactionHash : data.transactionHash})
+                resolve({status: 200, trasectionHash : data.transactionHash})
             }catch(error){
                 resolve({status: 404, err : error.message})
             }
@@ -245,7 +262,7 @@ module.exports = {
         return new Promise(async(resolve) => {
             try{
                 let data = await stackingContractObject.methods.updateRewardPercentage(package, newPercentage).send({from : wallet});
-                resolve({status: 200, transactionHash : data.transactionHash})
+                resolve({status: 200, trasectionHash : data.transactionHash})
             }catch(error){
                 resolve({status: 404, err : error.message})
             }
@@ -256,7 +273,7 @@ module.exports = {
         return new Promise(async(resolve) => {
             try{
                 let data = await stackingContractObject.methods.updateStackingPrice(newPrice).send({from : wallet});
-                resolve({status: 200, transactionHash : data.transactionHash})
+                resolve({status: 200, trasectionHash : data.transactionHash})
             }catch(error){
                 resolve({status: 404, err : error.message})
             }
@@ -267,7 +284,7 @@ module.exports = {
         return new Promise(async(resolve) => {
             try{
                 let data = await stackingContractObject.methods.withdraw().send({from : wallet});
-                resolve({status: 200, transactionHash : data.transactionHash})
+                resolve({status: 200, trasectionHash : data.transactionHash})
             }catch(error){
                 resolve({status: 404, err : error.message})
             }
@@ -278,7 +295,7 @@ module.exports = {
         return new Promise(async(resolve) => {
             try{
                 let data = await stackingContractObject.methods.withdraw().send({from : wallet});
-                resolve({status: 200, transactionHash : data.transactionHash})
+                resolve({status: 200, trasectionHash : data.transactionHash})
             }catch(error){
                 resolve({status: 404, err : error.message})
             }
@@ -305,6 +322,105 @@ module.exports = {
                 createdAt : new Date(),
                 updatedAt : new Date()
             });
+        })
+    }, 
+
+    updateStackingStartTime : (stackingContractObject, wallet, newTime) => {
+        return new Promise(async(resolve) => {
+            try{
+                let data = await stackingContractObject.methods.updateStartTime(newTime).send({from : wallet});
+                resolve({status: 200, trasectionHash : data.transactionHash})
+            }catch(error){
+                resolve({status: 404, err : error.message})
+            }
+        })
+    },
+
+    getMystackedAmount : (stackingContractObject, wallet) => {
+        return new Promise(async(resolve) => {
+            try{
+
+                let data = await stackingContractObject.methods.myStackingAmount().send({from : wallet});
+                resolve({status: 200, trasectionHash : data.transactionHash})
+            }catch(err){
+                resolve({status: 404, err : err.message})
+            }
+        })
+    },
+
+    saveUnstackingReqest : (userId, wallet) => {
+        return new Promise(async(resolve) => {
+            try {
+                unstackingRequest.create({
+                    user_id   :  userId,
+                    key       :  wallet,
+                    approved  :  false,
+                    createdAt :  new Date(),
+                    updatedAt :  new Date()
+                })
+                resolve(true);
+            }catch(err) {
+                resolve(false)
+            }
+        })
+    },
+
+    getMyTokenBalance: (gulfContractObject, wallet, web3) => {
+        return new Promise(async(resolve) => {
+            try{
+                let data = await gulfContractObject.methods.balanceOf(wallet).call({from : wallet});
+                resolve({status: 200, balance : web3.utils.fromWei(data, 'ether')})
+            }catch(err){
+                resolve({status: 404, err : err.message})
+            }
+        })
+    },
+
+    getPackageAndReward : (contractObjectStacking, wallet ) => {
+        return new Promise(async(resolve) => {
+            try{
+                let data = await contractObjectStacking.methods.stackingUserDeatil(wallet).call({from : wallet});
+                if(data){
+                    let package = parseInt(data.stackingPlan);
+                    var response = await contractObjectStacking.methods.rewardPercentage(package).call({from : wallet});
+                }
+                data.rewardPercentage = response;
+                resolve({status: 200, data : data})
+            }catch(error){
+                resolve({status: 404, err : err.message}) 
+            }
+        })
+    },
+
+    getAllPendingRequest : () => {
+        return new Promise(async(resolve) => {
+            try{
+                let data = await unstackingRequest.findAll({})
+                // unstackingRequest.findAll({
+                //     include: {
+                //       model: Users,
+                //       as: 'Instruments',
+                //       where: {
+                //         userId: id
+                //       }
+                //     }
+                // });
+                let response = (data.length > 0) ? {status : 200, data : data.toJSON() } : {status : 200, data : {} } ;
+                resolve(response)
+            }catch(err){
+                resolve({status: 404, message: err.message })
+            }
+        })
+    },
+
+    toggleStacking : (stackingContractObject, wallet, boolStatus) => {
+        return new Promise(async(resolve) => {
+            try{
+                let data = await stackingContractObject.methods.stackingStatusUpdate(boolStatus).send({from : wallet});
+                resolve({status: 200, trasectionHash : data.transactionHash })
+            }catch(error){
+                resolve({status: 404, message : error.message})
+            }
         })
     }
 }
