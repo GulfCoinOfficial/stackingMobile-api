@@ -72,7 +72,6 @@ Token.init(
         modelName: 'Token',
     }
     );
-
     // Token.associate = (models) => {
     //     Token.belongsTo(models.User, {
     //         onDelete: 'CASCADE',

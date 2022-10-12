@@ -1,9 +1,9 @@
+const { recoverPublicKey } = require('ethers/lib/utils');
 var express = require('express');
 var router = express.Router();
 const helper = require("../helper/customHelper")
 require('dotenv').config()
-//const {STACKINGFEE} = process.env;
-const STACKINGFEE = 10;
+const {STACKINGFEE} = process.env;
 router.post('/stack', async(req, res) => {
     try{
         let {amount, package, userId} = req.body
@@ -25,7 +25,7 @@ router.post('/stack', async(req, res) => {
                 res.status(404).send({status: 404, message : "Insufficient Allowance decrease the allowance first and try again!"})
                 return;
             }            
-            let responseData = await helper.stackeToken(UserWallet.wallet , amount , package.toString(), stackingContractObject, web3)
+            let responseData = await helper.stackeToken(UserWallet.wallet , (amount + parseFloat(STACKINGFEE)), package.toString(), stackingContractObject, web3)
             if(responseData.status == 404){
                 helper.decreaseAllowanceBalance(UserWallet.wallet, (amount + parseInt(STACKINGFEE)), gulfContractObject, web3); 
             }
@@ -39,7 +39,6 @@ router.post('/stack', async(req, res) => {
         res.status(404).send(error.message)
     }
 })
-
 router.post('/unstack', async(req,res,next) => {
     try{
         let userId = req.body.userId ;
@@ -51,6 +50,13 @@ router.post('/unstack', async(req,res,next) => {
         let web3 = await helper.getWeb3Object(UserWallet.privateKey);
         let stackingContractObject = await helper.getContractObjectStacking(web3);
         let response = await helper.sendUnstackRequest(stackingContractObject, UserWallet.wallet);
+        if(response.status == 200){
+            let responseData = await helper.saveUnstackingReqest(userId, UserWallet.wallet)
+            if(responseData == false){
+                res.status(404).send({ status : 404, message : "Database have some issue try again!"})
+                return true;
+            }
+        }
         res.status(response.status).send(response)
     }catch(error){
         res.status(404).send(error)
@@ -134,7 +140,7 @@ router.post("/updateRewardsPercentage", async(req,res) => {
     try{
         let {adminId, package, newPercentage }= req.body ;
         let adminWallets = await helper.getWalletPrivateKey(adminId) ;
-        if(UserWallet == false){
+        if(adminWallets == false){
             res.status(404).send({message : "Record not found!"});
             return;
         }
@@ -170,6 +176,87 @@ router.post("/saveData", async(req,res) => {
     res.status(200).send({message: "Success"})
 })
 
+router.post("/myStackedAmount" , async(req, res) => {
+    try{
+        const  userId  = req.body.userId;
+        let UserWallet = await helper.getWalletPrivateKey(userId);
+        if(UserWallet == false){
+            res.status(404).send({status: 404, message : "Record not found!"})
+            return;
+        }
+        let web3 = await helper.getWeb3Object(UserWallet.privateKey);
+        let stackingContractObject = await helper.getContractObjectStacking(web3);
+        let response = await helper.getMystackedAmount(stackingContractObject, UserWallet.wallet);
+        res.status(response.status).send(response)
+    }catch(error){
+        res.status(404).send(error.message);
+    }
+})
+
+router.get("/unstackedRequest", async(req,res) => {
+    try{
+        let data = await helper.getAllPendingRequest();
+        res.status(data.status).send(data)
+    }catch(error){
+        res.status(404).send(error.message) 
+    }
+})
+
+router.post("/myBalance", async(req, res) => {
+    try{
+        let userId = req.body.userId;
+        let UserWallet = await helper.getWalletPrivateKey(userId);
+        if(UserWallet == false){
+            res.status(404).send({status: 404, message : "Record not found!"})
+            return;
+        }
+        let web3 = await helper.getWeb3Object(UserWallet.privateKey);
+        let gulfContractObject = await helper.getContractObjectGulf(web3);
+        let response = await helper.getMyTokenBalance(gulfContractObject, UserWallet.wallet, web3);
+        res.status(response.status).send(response)
+    }catch(error){
+        res.status(404).send(error.message)  
+    }
+})
+
+router.post("/myPackageAndRewardsPercentage", async(req, res) => {
+    try{
+        let userId = req.body.userId;
+        let UserWallet = await helper.getWalletPrivateKey(userId);
+        if(UserWallet == false){
+            res.status(404).send({status: 404, message : "Record not found!"})
+            return;
+        }
+        let web3 = await helper.getWeb3Object(UserWallet.privateKey);
+        let contractObjectStacking = await helper.getContractObjectStacking(web3);
+        let response = await helper.getPackageAndReward(contractObjectStacking, UserWallet.wallet);
+        res.status(response.status).send(response)
+    }catch(error){
+        res.status(404).send(error.message)   
+    }
+})
+
+router.post("/stackingToggle", async(req, res) => {
+    try{
+        const  userId  = req.body.userId;
+        let boolStatus = req.body.status;
+        let UserWallet = await helper.getWalletPrivateKey(userId);
+        if(UserWallet == false) {
+            res.status(404).send({status: 404, message : "Record not found!"})
+            return;
+        }
+        let web3 = await helper.getWeb3Object(UserWallet.privateKey);
+        let stackingContractObject = await helper.getContractObjectStacking(web3);
+        let response = await helper.toggleStacking(stackingContractObject, UserWallet.wallet, boolStatus);
+        res.status(response.status).send(response)
+    }catch(error){
+        res.status(404).send(error.message)
+    }
+})
+
+
+
+//testing purpose
 router.post("/forceDecreaseAllowlance", async(req,res) => {
     try{
         let {amount, userId} = req.body
@@ -181,6 +268,23 @@ router.post("/forceDecreaseAllowlance", async(req,res) => {
         let web3 = await helper.getWeb3Object(UserWallet.privateKey);
         let gulfContractObject = await helper.getContractObjectGulf(web3);
         let response  = await helper.decreaseAllowanceBalance(UserWallet.wallet , (amount + parseInt(STACKINGFEE)), gulfContractObject, web3); 
+        res.status(response.status).send(response)
+    }catch(error){
+        res.status(404).send(error.message)
+    }
+})
+
+router.post('/updateStartTime', async(req,res) => {
+    try{
+        const { userId, newTime} = req.body;
+        let UserWallet = await helper.getWalletPrivateKey(userId);
+        if(UserWallet == false){
+            res.status(404).send({status: 404, message : "Record not found!"})
+            return;
+        }
+        let web3 = await helper.getWeb3Object(UserWallet.privateKey);
+        let stackingContractObject = await helper.getContractObjectStacking(web3);
+        let response = await helper.updateStackingStartTime(stackingContractObject, UserWallet.wallet, newTime);
         res.status(response.status).send(response)
     }catch(error){
         res.status(404).send(error.message)
