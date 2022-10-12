@@ -178,10 +178,8 @@ module.exports = {
     decreaseAllowanceBalance : (wallet, amount, gulfContractObject, web3) => {
         return new Promise(async(resolve) => {
             try{
-                console.log("========>>>>>>>>>>>>>>", amount)
                 let result = await gulfContractObject.methods.decreaseAllowance(STACKINGCONTRACTADDRESS, web3.utils.toWei(amount.toString()) ).send({from : wallet})
-                console.log("transfer allow Hash ====>>>>>", result.transactionHash);
-                resolve({status:200, trasectionHash: result.transactionHash });
+                resolve({status:200, transactionHash: result.transactionHash });
             }catch(error){
                 resolve({status:404, message: error.message})
             }
@@ -192,7 +190,7 @@ module.exports = {
         return new Promise(async(resolve) => {
             try{
                 let data = await stackingContractObject.methods.submitRequestForUnstack().send({from : wallet});
-                resolve({status: 200, trasectionHash : data.transactionHash})
+                resolve({status: 200, transactionHash : data.transactionHash})
             }catch(error){
                 resolve({status: 404, err : error.message})
             }
@@ -203,7 +201,7 @@ module.exports = {
         return new Promise(async(resolve) => {
             try{
                 let data = await stackingContractObject.methods.claimRewards().send({from : wallet});
-                resolve({status: 200, trasectionHash : data.transactionHash})
+                resolve({status: 200, transactionHash : data.transactionHash})
             }catch(error){
                 resolve({status: 404, err : error.message})
             }
@@ -214,7 +212,7 @@ module.exports = {
         return new Promise(async(resolve) => {
             try{
                 let data = await stackingContractObject.methods.renewPackage(newPackage).send({from : wallet});
-                resolve({status: 200, trasectionHash : data.transactionHash})
+                resolve({status: 200, transactionHash : data.transactionHash})
             }catch(error){
                 resolve({status: 404, err : error.message})
             }
@@ -225,7 +223,7 @@ module.exports = {
         return new Promise(async(resolve) => {
             try{
                 let data = await stackingContractObject.methods.approvedStackingRequest(wallet).send({from : adminWallet});
-                resolve({status: 200, trasectionHash : data.transactionHash})
+                resolve({status: 200, transactionHash : data.transactionHash})
             }catch(error){
                 resolve({status: 404, err : error.message})
             }
@@ -236,7 +234,7 @@ module.exports = {
         return new Promise(async(resolve) => {
             try{
                 let data = await stackingContractObject.methods.updatePanalityPercentage(package, newPercentage).send({from : wallet});
-                resolve({status: 200, trasectionHash : data.transactionHash})
+                resolve({status: 200, transactionHash : data.transactionHash})
             }catch(error){
                 resolve({status: 404, err : error.message})
             }
@@ -247,7 +245,7 @@ module.exports = {
         return new Promise(async(resolve) => {
             try{
                 let data = await stackingContractObject.methods.updateRewardPercentage(package, newPercentage).send({from : wallet});
-                resolve({status: 200, trasectionHash : data.transactionHash})
+                resolve({status: 200, transactionHash : data.transactionHash})
             }catch(error){
                 resolve({status: 404, err : error.message})
             }
@@ -258,7 +256,7 @@ module.exports = {
         return new Promise(async(resolve) => {
             try{
                 let data = await stackingContractObject.methods.updateStackingPrice(newPrice).send({from : wallet});
-                resolve({status: 200, trasectionHash : data.transactionHash})
+                resolve({status: 200, transactionHash : data.transactionHash})
             }catch(error){
                 resolve({status: 404, err : error.message})
             }
@@ -269,7 +267,7 @@ module.exports = {
         return new Promise(async(resolve) => {
             try{
                 let data = await stackingContractObject.methods.withdraw().send({from : wallet});
-                resolve({status: 200, trasectionHash : data.transactionHash})
+                resolve({status: 200, transactionHash : data.transactionHash})
             }catch(error){
                 resolve({status: 404, err : error.message})
             }
@@ -280,7 +278,7 @@ module.exports = {
         return new Promise(async(resolve) => {
             try{
                 let data = await stackingContractObject.methods.withdraw().send({from : wallet});
-                resolve({status: 200, trasectionHash : data.transactionHash})
+                resolve({status: 200, transactionHash : data.transactionHash})
             }catch(error){
                 resolve({status: 404, err : error.message})
             }
