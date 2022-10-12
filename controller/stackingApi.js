@@ -134,7 +134,7 @@ router.post("/updateRewardsPercentage", async(req,res) => {
     try{
         let {adminId, package, newPercentage }= req.body ;
         let adminWallets = await helper.getWalletPrivateKey(adminId) ;
-        if(UserWallet == false){
+        if(adminWallets == false){
             res.status(404).send({message : "Record not found!"});
             return;
         }
