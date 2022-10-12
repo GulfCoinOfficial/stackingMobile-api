@@ -3,8 +3,8 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+var cors = require('cors')
 const sequelize  = require("./databaseConnection/db");
-
 try {
   sequelize.authenticate()
   console.log('Connection To Database Has Been Established')
@@ -16,6 +16,7 @@ var indexRouter = require('./controller/communication');
 var stack = require("./controller/stackingApi");
 //var swap = require("./controller/swapping");
 var app = express();
+app.use(cors({ origin: true }));
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
