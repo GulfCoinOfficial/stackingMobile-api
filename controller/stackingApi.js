@@ -3,8 +3,12 @@ var router = express.Router();
 const helper = require("../helper/customHelper")
 require('dotenv').config()
 //const {STACKINGFEE} = process.env;
+console.log("STACKING FEE testing ======>", process.env.STACKINGFEE);
+console.log("ENV testing ======>", process.env.STACKINGFEE);
+console.log("env testing ======>", process.env.SENDERNAME);
+console.log("env testing ======>", process.env.EXPIRYMINUTES);
+console.log("env testing ======>", process.env.STACKINGCONTRACTADDRESS);
 const STACKINGFEE = 10;
-
 router.post('/stack', async(req, res) => {
     try{
         let {amount, package, userId} = req.body
