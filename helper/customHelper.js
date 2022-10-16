@@ -395,7 +395,7 @@ module.exports = {
     getAllPendingRequest : () => {
         return new Promise(async(resolve) => {
             try{
-                let data = await unstackingRequest.findAll({})
+                let responseData = await unstackingRequest.findAll({raw:true})
                 // unstackingRequest.findAll({
                 //     include: {
                 //       model: Users,
@@ -405,7 +405,7 @@ module.exports = {
                 //       }
                 //     }
                 // });
-                let response = (data.length > 0) ? {status : 200, data : data.toJSON() } : {status : 200, data : {} } ;
+                let response = (responseData.length > 0) ? {status : 200, data : responseData } : {status : 200, data : {} } ;
                 resolve(response)
             }catch(err){
                 resolve({status: 404, message: err.message })
