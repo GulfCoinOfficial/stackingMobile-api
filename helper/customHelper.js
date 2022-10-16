@@ -3,7 +3,8 @@ const sequelize = require('../databaseConnection/db');
 require('dotenv').config()
 const {Op} = require("sequelize")
 const opt = require("../models/otp")
-const token = require("../models/tokens");
+const token = require("../models/tokens")
+const unstackingRequest = require("../models/unstackingRequest")
 const StackingAbi = require("../abi/stackingAbi.json");
 const gulfAbi = require("../abi/gulfAbi.json");
 
