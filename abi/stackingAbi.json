@@ -63,25 +63,6 @@
         "type": "function"
     },
     {
-        "inputs": [
-            {
-                "internalType": "address",
-                "name": "",
-                "type": "address"
-            }
-        ],
-        "name": "claimedRewardsTransfered",
-        "outputs": [
-            {
-                "internalType": "uint256",
-                "name": "",
-                "type": "uint256"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
         "inputs": [],
         "name": "gulfTokenAddress",
         "outputs": [
@@ -345,6 +326,11 @@
                 "internalType": "bool",
                 "name": "status",
                 "type": "bool"
+            },
+            {
+                "internalType": "uint256",
+                "name": "totalEarning",
+                "type": "uint256"
             }
         ],
         "stateMutability": "view",
@@ -413,13 +399,8 @@
         "name": "unstackingRequests",
         "outputs": [
             {
-                "internalType": "uint256",
-                "name": "amount",
-                "type": "uint256"
-            },
-            {
                 "internalType": "bool",
-                "name": "status",
+                "name": "",
                 "type": "bool"
             }
         ],
