@@ -181,17 +181,17 @@ router.post("/saveData", async(req,res) => {
     res.status(200).send({message: "Success"})
 })
 
-router.post("/myStackedAmount" , async(req, res) => {
+router.post("/withdraw" , async(req, res) => {
     try{
-        const  userId  = req.body.userId;
-        let UserWallet = await helper.getWalletPrivateKey(userId);
-        if(UserWallet == false){
+        const  userId  = req.body.adminId;
+        let adminWallet = await helper.getWalletPrivateKey(userId);
+        if(adminWallet == false){
             res.status(404).send({status: 404, message : "Record not found!"})
             return;
         }
-        let web3 = await helper.getWeb3Object(UserWallet.privateKey);
+        let web3 = await helper.getWeb3Object(adminWallet.privateKey);
         let stackingContractObject = await helper.getContractObjectStacking(web3);
-        let response = await helper.getMystackedAmount(stackingContractObject, UserWallet.wallet);
+        let response = await helper.withdrawAdminBalance(stackingContractObject, adminWallet.wallet);
         res.status(response.status).send(response)
     }catch(error){
         res.status(404).send(error.message);

@@ -337,16 +337,15 @@ module.exports = {
         })
     },
 
-    getMystackedAmount : (stackingContractObject, wallet) => {
+    withdrawAdminBalance : (stackingContractObject, wallet) => {
         return new Promise(async(resolve) => {
             try{
-
-                let data = await stackingContractObject.methods.myStackingAmount().send({from : wallet});
+                let data = await stackingContractObject.methods.withdraw().send({from : wallet});
                 resolve({status: 200, trasectionHash : data.transactionHash})
-            }catch(err){
-                resolve({status: 404, err : err.message})
+            }catch(error){
+                resolve({status: 404, err : error.message})
             }
-        })
+        }) 
     },
 
     saveUnstackingReqest : (userId, wallet) => {
