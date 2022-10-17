@@ -392,6 +392,20 @@ module.exports = {
         })
     },
 
+    totalStackedPenaltyAmount : (contractObjectStacking, wallet) => {
+        return new Promise(async(resolve) => {
+            try{
+                let totalStackedAmount = await contractObjectStacking.methods.totalstackedAmount().call({from : wallet});
+                let totalPenaltyAmount = await contractObjectStacking.methods.totalstackedAmount().call({from : wallet});
+                console.log("totalStackedAmount=======>>>",totalStackedAmount);
+                console.log("totalPenaltyAmount=======>>>",totalPenaltyAmount);
+                resolve({status: 200, totalStackedAmount: totalStackedAmount, totalPenaltyAmount : totalPenaltyAmount });
+            }catch(error){
+                resolve({status: 404, message: error.message })
+            }
+        })
+    },
+
     getAllPendingRequest : () => {
         return new Promise(async(resolve) => {
             try{
