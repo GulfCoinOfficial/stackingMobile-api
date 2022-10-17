@@ -290,6 +290,22 @@ router.post("/getTotalStackedAndPenaltyAmount", async(req, res) => {
     }
 })
 
+router.post("/getStackingStatus", async(req,res) => {
+    try{
+        let adminId = req.body.adminId;
+        let adminWallet = await helper.getWalletPrivateKey(adminId);
+        if(adminWallet == false){
+            res.status(404).send({status: 404, message : "Record not found!"})
+            return;
+        }
+        let web3 = await helper.getWeb3Object(adminWallet.privateKey);
+        let contractObjectStacking = await helper.getContractObjectStacking(web3);
+        let response = await helper.getStackingStatus(contractObjectStacking, adminWallet.wallet);
+        res.status(response.status).send(response)
+    }catch(error){
+        res.status(404).send(error.message)
+    }
+})
 
 //testing purpose
 router.post("/forceDecreaseAllowlance", async(req,res) => {
@@ -325,5 +341,6 @@ router.post('/updateStartTime', async(req,res) => {
         res.status(404).send(error.message)
     }
 })
+
 
 module.exports = router;

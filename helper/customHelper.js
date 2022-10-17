@@ -406,6 +406,18 @@ module.exports = {
         })
     },
 
+    getStackingStatus: (contractObjectStacking, wallet) => {
+        return new Promise(async(resolve) => {
+            try{
+                let status = await contractObjectStacking.methods.stackingStatus().call({from : wallet});
+                console.log("status=======>>>",status);
+                resolve({status: 200, stackingStatus : status });
+            }catch(error){
+                resolve({status: 404, message: error.message })
+            }
+        })
+    },
+
     getAllPendingRequest : () => {
         return new Promise(async(resolve) => {
             try{
