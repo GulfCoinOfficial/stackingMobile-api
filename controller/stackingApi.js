@@ -198,6 +198,20 @@ router.post("/withdraw" , async(req, res) => {
     }
 })
 
+router.post("/getUserWallet", async(req, res) => {
+    try{
+        let userId = req.body.userId;
+        let UserWallet = await helper.getWalletPrivateKey(userId);
+        if(UserWallet == false){
+            res.status(404).send({status: 404, message : "Record not found!"})
+            return;
+        }
+        res.status(200).send({status: 200, wallet : UserWallet.wallet})
+    }catch(error){
+        res.status(404).send(error.message)  
+    }
+})
+
 router.get("/unstackedRequest", async(req,res) => {
     try{
         let data = await helper.getAllPendingRequest();
