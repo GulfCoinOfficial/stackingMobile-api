@@ -397,9 +397,11 @@ module.exports = {
             try{
                 let totalStackedAmount = await contractObjectStacking.methods.totalstackedAmount().call({from : wallet});
                 let totalPenaltyAmount = await contractObjectStacking.methods.totalstackedAmount().call({from : wallet});
-                console.log("totalStackedAmount=======>>>",totalStackedAmount);
-                console.log("totalPenaltyAmount=======>>>",totalPenaltyAmount);
-                resolve({status: 200, totalStackedAmount: totalStackedAmount, totalPenaltyAmount : totalPenaltyAmount });
+                let totalRewardsAmount = await contractObjectStacking.methods.totalRewardsDistributed().call({from : wallet});
+                console.log("totalStackedAmount=======>>>", totalStackedAmount);
+                console.log("totalPenaltyAmount=======>>>", totalPenaltyAmount);
+                console.log("totalRewardsAmount=======>>>", totalRewardsAmount);
+                resolve({status: 200, totalStackedAmount: totalStackedAmount, totalPenaltyAmount : totalPenaltyAmount , totalRewardsAmount: totalRewardsAmount});
             }catch(error){
                 resolve({status: 404, message: error.message })
             }
