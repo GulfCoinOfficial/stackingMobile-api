@@ -151,7 +151,7 @@ router.post("/updateRewardsPercentage", async(req,res) => {
         }
         let web3 = await helper.getWeb3Object(adminWallets.privateKey);
         let stackingContractObject = await helper.getContractObjectStacking(web3);
-        let response = await helper.updatePanality(stackingContractObject, adminWallets.wallet, package, newPercentage);
+        let response = await helper.updateRewards(stackingContractObject, adminWallets.wallet, package, newPercentage);
         res.status(response.status).send(response)
     }catch(error){
         res.status(404).send(error)
@@ -284,6 +284,7 @@ router.post("/getTotalStackedAndPenaltyAmount", async(req, res) => {
         let web3 = await helper.getWeb3Object(adminWallet.privateKey);
         let contractObjectStacking = await helper.getContractObjectStacking(web3);
         let response = await helper.totalStackedPenaltyAmount(contractObjectStacking, adminWallet.wallet);
+        console,log("Response =====>>", response);
         res.status(response.status).send(response)
     }catch(error){
         res.status(404).send(error.message)
