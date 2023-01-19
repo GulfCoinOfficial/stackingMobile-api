@@ -1,0 +1,27 @@
+{
+  "name": "sqltesting",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "start": "node ./bin/www",
+    "dev": "nodemon ./bin/www"
+  },
+  "dependencies": {
+    "@ethersproject/providers": "^5.7.1",
+    "@truffle/hdwallet-provider": "^2.0.16",
+    "alchemy-sdk": "^2.1.0",
+    "cookie-parser": "~1.4.4",
+    "cors": "^2.8.5",
+    "debug": "~2.6.9",
+    "dotenv": "^16.0.3",
+    "express": "~4.16.1",
+    "http-errors": "~1.6.3",
+    "jade": "~1.11.0",
+    "messente_api": "^1.4.0",
+    "morgan": "~1.9.1",
+    "nodemon": "^2.0.20",
+    "pg": "^8.8.0",
+    "sequelize": "^6.23.2",
+    "web3": "^1.8.0"
+  }
+}
